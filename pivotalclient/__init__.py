@@ -60,6 +60,10 @@ class PivotalClient:
         self.api_projects = '{}/projects'.format(self.api_root)
         if self.project_id:
             self.api_project = '{}/{}'.format(self.api_projects, self.project_id)
+            self.api_project_iterations = '{}/{}/iterations'.format(self.api_projects, self.project_id)
+            self.api_project_cycle_time_details = '{}/{}/iterations/{}/analytics/cycle_time_details'.format(
+                self.api_projects, self.project_id, '{}')
+            self.api_project_iteration = '{}/{}/iteration/{}'.format(self.api_projects, self.project_id, '{}')
             self.api_project_memberships = '{}/memberships'.format(self.api_project)
             self.api_stories = '{}/stories'.format(self.api_project, self.project_id)
             self.api_story = '{}/stories/{}'.format(self.api_project, '{}')
@@ -155,6 +159,31 @@ class PivotalClient:
             except Exception as ex:
                 caller_name = inspect.stack()[1][3]
             raise ApiError('Account ID not set on API connection and is required by {}().'.format(caller_name))
+
+    def get_projects(self):
+        uri = self.api_projects
+        results = self._get(uri)
+        return results
+
+    def get_project(self):
+        uri = self.api_project
+        results = self._get(uri)
+        return results
+
+    def get_project_iterations(self):
+        uri = self.api_project_iterations
+        results = self._get(uri)
+        return results
+
+    def get_project_iteration(self, iteration_id):
+        uri = self.api_project_iteration.format(iteration_id)
+        results = self._get(uri)
+        return results
+
+    def get_project_cycle_time_details(self, iteration_id):
+        uri = self.api_project_cycle_time_details.format(iteration_id)
+        results = self._get(uri)
+        return results
 
     def get_story(self, story_id):
         self._verify_project_id_exists()
