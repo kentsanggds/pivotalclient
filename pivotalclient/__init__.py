@@ -90,7 +90,7 @@ class PivotalClient:
 
         resp = requests.get(endpoint, params=_querystring, headers=headers)
         if not resp or not 200 <= resp.status_code < 300:
-            raise ApiError('GET {} {}'.format(endpoint, resp.status_code))
+            raise ApiError('GET {} {} {}'.format(endpoint, resp.status_code, resp.json()))
         return resp.json()
 
     def _post(self, endpoint, json):
